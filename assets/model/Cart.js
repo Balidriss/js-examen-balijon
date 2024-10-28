@@ -1,7 +1,7 @@
 export default class Cart {
-    static items = [];
+  static items = [];
 
-    static addToCart(camera) {
+  static addToCart(camera) {
     //TODO
-    }
+  }
 }
