@@ -15,7 +15,6 @@ async function init() {
   const productsContainer = document.getElementById('products-container');
   if (productsContainer) {
     displayCamera(catalog.sort(Catalog.SEARCH_DATE_ASC), productsContainer);
-    // displayCamera(catalog.searchByTerm('Lumix'), productsContainer);
   }
   const cartContainer = document.getElementById('cart-container');
   if (cartContainer) {

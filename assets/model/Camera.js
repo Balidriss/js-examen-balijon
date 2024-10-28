@@ -1,3 +1,5 @@
+import Cart from './Cart.js';
+
 export default class Camera {
   constructor(nom_produit, descriptif, caracteristiques, prix, image) {
     this.nom_produit = nom_produit;
