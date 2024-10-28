@@ -7,6 +7,7 @@ init();
 
 async function init() {
   const products = await fetchProducts();
+  setIndex(products);
   const hotProductContainer = document.getElementById('hot-product-container');
   let catalog = new Catalog(products);
   if (hotProductContainer) {
@@ -36,6 +37,7 @@ async function fetchProducts() {
     return [];
   }
 }
+
 // ! replace the elements in the container !
 function displayCamera(arrayCameras, container, typeOfDisplay = 'preview') {
   container.innerHTML = '';
@@ -45,6 +47,7 @@ function displayCamera(arrayCameras, container, typeOfDisplay = 'preview') {
 
   arrayCameras.forEach((cameraJson) => {
     const camera = new Camera(
+      cameraJson.id,
       cameraJson.nom_produit,
       cameraJson.desciptif,
       cameraJson.caracteristiques,
@@ -60,4 +63,11 @@ function displayCamera(arrayCameras, container, typeOfDisplay = 'preview') {
     }
     container.appendChild(cameraCard);
   });
+}
+
+function setIndex(array) {
+  array.forEach((item, index) => {
+    item.id = index;
+  });
+  return array;
 }
