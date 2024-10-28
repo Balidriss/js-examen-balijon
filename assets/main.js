@@ -8,6 +8,7 @@ init();
 async function init() {
   const products = await fetchProducts();
   setIndex(products);
+
   const hotProductContainer = document.getElementById('hot-product-container');
   let catalog = new Catalog(products);
   if (hotProductContainer) {
@@ -19,6 +20,7 @@ async function init() {
   }
   const cartContainer = document.getElementById('cart-container');
   if (cartContainer) {
+    displayCamera(cart.items, cartContainer);
   }
 }
 
@@ -41,26 +43,37 @@ async function fetchProducts() {
 // ! replace the elements in the container !
 function displayCamera(arrayCameras, container, typeOfDisplay = 'preview') {
   container.innerHTML = '';
-  let cameraCard = document.createElement('p');
+  let cameraCard;
+  cameraCard = document.createElement('p');
   cameraCard.textContent =
-    "Désolé nous n'avons pas pu trouver d'article avec ces critères";
+    "Désolé, nous n'avons pas pu trouver d'article avec ces critères";
+  container.appendChild(cameraCard);
 
   arrayCameras.forEach((cameraJson) => {
     const camera = new Camera(
       cameraJson.id,
       cameraJson.nom_produit,
-      cameraJson.desciptif,
+      cameraJson.descriptif,
       cameraJson.caracteristiques,
       cameraJson.prix,
       cameraJson.image
     );
-    if (typeOfDisplay === 'preview') {
-      cameraCard = camera.createPreviewCardElement();
-    } else if (typeOfDisplay === 'detailed') {
-      const cameraCard = camera.createDetailedCardElement();
-    } else {
-      console.error('wrong type of display from displayCamera');
+
+    switch (typeOfDisplay) {
+      case 'preview':
+        cameraCard = camera.createPreviewCardElement();
+        break;
+      case 'detailed':
+        cameraCard = camera.createDetailedCardElement();
+        break;
+      case 'cart':
+        cameraCard = camera.createPreviewInCartElement();
+        break;
+      default:
+        console.error("Erreur: Type d'affichage incorrect pour displayCamera");
+        return;
     }
+
     container.appendChild(cameraCard);
   });
 }

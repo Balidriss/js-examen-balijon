@@ -43,4 +43,9 @@ export default class Camera {
     card.appendChild(button);
     //TODO
   }
+  createPreviewInCartElement() {
+    //TODO
+    //remove button
+    //detail button
+  }
 }
