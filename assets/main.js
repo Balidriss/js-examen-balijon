@@ -11,6 +11,7 @@ async function init() {
   );
   const orderContainer = document.getElementById('recap-order-section');
   const historicContainer = document.getElementById('orders-section');
+  const pastOrderContainer = document.getElementById('past-order-container');
 
   //// index
 
@@ -20,4 +21,5 @@ async function init() {
   Display.renderProductDetailPageContainer(detailProductContainer);
   Display.renderOrderValidationPageContainer(orderContainer);
   Display.renderHistoricPageContainer(historicContainer);
+  Display.renderOrderDetailPageContainer(pastOrderContainer);
 }

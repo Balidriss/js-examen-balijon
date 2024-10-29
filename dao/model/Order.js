@@ -9,11 +9,17 @@ export default class Order {
     this.items = items;
     this.totalPrice = totalPrice;
     this.id = Order.counter++;
+    localStorage.setItem('counter', JSON.stringify(Order.counter));
   }
 
   addToHistory() {
     Order.orders.push(this);
     localStorage.setItem('orders', JSON.stringify(Order.orders));
+  }
+
+  static find(id)
+  {
+    return Order.orders.find((item) => item.id == id);
   }
 
   static addNewOrder(cart) {

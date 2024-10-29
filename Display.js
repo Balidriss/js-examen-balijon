@@ -105,6 +105,22 @@ export default class Display {
     }
   }
 
+  static async renderOrderDetailPageContainer(container) {
+    if (container) {
+      const order = Order.find(new URLSearchParams(window.location.search).get('id'));
+      const display = new Display(order.items, container);
+      display.render('detailorder');
+
+        document.getElementById('quantity').textContent = order.items.length;
+        document.getElementById(
+          'total-price'
+        ).textContent = `${order.totalPrice} €`;
+      }
+    }
+
+    
+  
+
   render(type = 'preview') {
     this.container.innerHTML = '';
     this.products.forEach((item) => {
@@ -123,7 +139,10 @@ export default class Display {
           card = this.createCartCard(item);
           break;
           case 'historic':
-          card = this.createOrderCard(item)
+          card = this.createOrderCard(item);
+          break;
+          case 'detailorder':
+          card = this.createOrderDetail(item);
           break;
         default:
           console.error("Type d'affichage inconnue : " + type);
@@ -145,6 +164,13 @@ export default class Display {
     return card;
   }
 
+  createOrderCardContainer()
+  {
+    const card = document.createElement('article');
+    card.className = 'order-card';
+    return card;
+  }
+
   createMinimumViewCard(item) {
     const card = this.createBaseCard();
     this.addImg(card, item);
@@ -161,10 +187,18 @@ export default class Display {
     this.addLinkToDetail(card, item.id, 'product');
     return card;
   }
+  createOrderDetail(item)
+  {
+    const card = this.createBaseCard();
+    this.addImg(card, item);
+    this.addTitle(card, item.nom_produit, 'h3');
+    this.addLinkFromOrderDetail(card,item.id);
+    return card;
+  }
 
   createDetailedCard(item) {
     const card = this.createBaseCard();
-    this.addImg(card, item);
+    this.addImg(card, item, true);
     this.addTitle(card, item.nom_produit, 'h2');
     this.addPrice(card, item.prix);
     this.addDecription(card, item.description);
@@ -184,7 +218,7 @@ export default class Display {
 
   createOrderCard(item)
   {
-    const card = this.createBaseCard();
+    const card = this.createOrderCardContainer();
     this.addTitle(card,item.name);
     this.addPrice(card,item.totalPrice);
     this.addDate(card,item.date);
@@ -192,11 +226,18 @@ export default class Display {
     return card;
   }
 
-  addImg(container, item) {
+  addImg(container, item, previewImg = false) {
     const img = document.createElement('img');
     img.src = `/assets/${item.image}`;
     img.alt = item.nom_produit;
-    container.appendChild(img);
+if(previewImg){
+    const aElement = document.createElement('a');
+    aElement.href = `/assets/${item.image}`;
+    aElement.appendChild(img);
+    container.appendChild(aElement);}
+    else{
+      container.appendChild(img);
+    }
   }
 
   addTitle(container, content, hTitle) {
@@ -222,6 +263,12 @@ export default class Display {
     container.classList.add('linked');
     container.addEventListener('click', () => {
       window.location.href = `${model}/detail.html?id=${id}`;
+    });
+  }
+  addLinkFromOrderDetail(container, id) {
+    container.classList.add('linked');
+    container.addEventListener('click', () => {
+      window.location.href = `../product/detail.html?id=${id}`;
     });
   }
 
