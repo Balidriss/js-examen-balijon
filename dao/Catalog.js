@@ -5,20 +5,22 @@ export default class Catalog {
   static SEARCH_ABC_ASC = '_2a_';
   static SEARCH_ABC_DESC = '_2b_';
   static SEARCH_PRICE_ASC = '_3a_';
-  static SEARCH_PRICE_DESC = '_4b_';
-  static SEARCH_RESOLUTION_ASC = '_5a_';
-  static SEARCH_RESOLUTION_DESC = '_6b_';
+  static SEARCH_PRICE_DESC = '_3b_';
+  static SEARCH_RESOLUTION_ASC = '_4a_';
+  static SEARCH_RESOLUTION_DESC = '_4b_';
 
-  constructor(products) {
-    this.products = products;
+  constructor() {
+    this.products = [];
   }
 
-  //sort product based of search inputs
+  async initializeCatalog() {
+    this.products = await Catalog.getProducts();
+  }
+
   sort(search) {
     let sortedProducts = [...this.products];
     switch (search) {
       case Catalog.SEARCH_DATE_ASC:
-        // No date, but use the order of the json
         return sortedProducts;
       case Catalog.SEARCH_DATE_DESC:
         return sortedProducts.reverse();
@@ -55,19 +57,43 @@ export default class Catalog {
     }
   }
 
-  // filter products based on a search term : name or description
+  // Filter products by search term in name or description
   searchByTerm(term) {
-    let sortedProducts = [...this.products];
-    return sortedProducts.filter(
+    return this.products.filter(
       (product) =>
         product.nom_produit.toLowerCase().includes(term.toLowerCase()) ||
         product.descriptif.toLowerCase().includes(term.toLowerCase())
     );
   }
 
-  // 5(default) latest product for the front page
+  // Retrieve the latest `n` products for the front page
   getLastNProducts(n = 5) {
-    let sortedProducts = [...this.products];
-    return sortedProducts.slice(-n);
+    return this.products.slice(-n).reverse();
+  }
+
+  // Fetch products from the JSON file
+  static async getProducts() {
+    try {
+      const response = await fetch('/assets/produits.json');
+      if (!response.ok) {
+        throw new Error(
+          'Erreur lors du chargement des données, vérifier si produits.json est bien dans le dossier /assets'
+        );
+      }
+      const products = await response.json();
+      return Catalog.setIndex(products);
+    } catch (error) {
+      console.error('Erreur:', error);
+      return [];
+    }
+  }
+
+  // Assign an ID
+  static setIndex(products) {
+    return products.map((product, index) => ({ id: index, ...product }));
+  }
+
+  find(id) {
+    return this.products.find((item) => item.id == id);
   }
 }
