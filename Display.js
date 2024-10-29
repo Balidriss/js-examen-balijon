@@ -78,12 +78,13 @@ export default class Display {
         form.appendChild(inputName);
         buttonCheckIn.type = 'submit';
         buttonCheckIn.value = 'Valider !';
-        buttonCheckIn.addEventListener('click', () => {
-          const order = new Order(inputName.value, cart.items)
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const order = new Order(inputName.value,cart.calculateTotalPrice(), cart.items)
           order.addToHistory();
           alert(`Votre commande : ${order.name} est enregistré ! Merci`)
           cart.clearCart();
-          window.location.href = 'index.html';
+          window.location.href = 'orders.html';
         });
 
         form.appendChild(buttonCheckIn);
@@ -123,6 +124,7 @@ export default class Display {
           break;
           case 'historic':
           card = this.createOrderCard(item)
+          break;
         default:
           console.error("Type d'affichage inconnue : " + type);
           return;
@@ -184,7 +186,7 @@ export default class Display {
   {
     const card = this.createBaseCard();
     this.addTitle(card,item.name);
-    this.addPrice(card,item.prix);
+    this.addPrice(card,item.totalPrice);
     this.addDate(card,item.date);
     this.addLinkToDetail(card, item.id, 'order');
     return card;
@@ -206,7 +208,7 @@ export default class Display {
   addPrice(container, price) {
     const priceElement = document.createElement('p');
     priceElement.className = 'price';
-    priceElement.textContent = `${price} €`;
+    priceElement.textContent = `${price}`;
     container.appendChild(priceElement);
   }
 

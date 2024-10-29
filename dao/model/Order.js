@@ -3,10 +3,11 @@ export default class Order {
   static orders = Order.loadOrdersLocalStorage();
   static counter = Order.loadCounterLocalStorage();
 
-  constructor(name, items) {
+  constructor(name,totalPrice, items) {
     this.name = name;
     this.date = new Date().toLocaleString();
     this.items = items;
+    this.totalPrice = totalPrice;
     this.id = Order.counter++;
   }
 
