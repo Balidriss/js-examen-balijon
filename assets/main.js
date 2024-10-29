@@ -13,6 +13,8 @@ async function init() {
   const historicContainer = document.getElementById('orders-section');
   const pastOrderContainer = document.getElementById('past-order-container');
 
+  const searchForm = document.getElementById('search-form');
+
   //// index
 
   Display.renderFrontPageContainer(hotProductContainer);
@@ -22,4 +24,5 @@ async function init() {
   Display.renderOrderValidationPageContainer(orderContainer);
   Display.renderHistoricPageContainer(historicContainer);
   Display.renderOrderDetailPageContainer(pastOrderContainer);
+  Display.renderSearch(searchForm,productsContainer);
 }

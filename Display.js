@@ -19,12 +19,14 @@ export default class Display {
 
   static async renderProductsPageContainer(
     container,
-    search = Catalog.SEARCH_DEFAULT
+    search = Catalog.SEARCH_DEFAULT,
+    term = null
   ) {
     if (container) {
+      container.innerHTML = '';
       const catalog = new Catalog();
       await catalog.initializeCatalog();
-      const display = new Display(catalog.sort(search), container);
+      const display = new Display(catalog.sort(search, term), container);
       display.render('preview');
     }
   }
@@ -201,7 +203,7 @@ export default class Display {
     this.addImg(card, item, true);
     this.addTitle(card, item.nom_produit, 'h2');
     this.addPrice(card, item.prix);
-    this.addDecription(card, item.description);
+    this.addDecription(card, item.descriptif);
     this.addCharacteristics(card, item.caracteristiques);
     this.addButtonAddToCart(card, item, item.nom_produit);
     return card;
@@ -315,4 +317,34 @@ if(previewImg){
     }
     container.appendChild(characteristicsList);
   }
+
+  static renderSearch(form,productsContainer)
+  {
+    if(form && productsContainer)
+    {
+      const selectElement = document.querySelector('select');
+      const inputTermElement = document.getElementById('term-input');
+      console.log(Catalog.searchs);
+          Catalog.searchs.forEach(criteria => {
+            
+            const optionElement = document.createElement('option');
+            
+            optionElement.textContent = criteria;
+            selectElement.appendChild(optionElement); 
+            });
+            form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            console.log(selectElement.options[selectElement.selectedIndex ].value);
+            if(!inputTermElement.value)
+            {
+              Display.renderProductsPageContainer(productsContainer,
+                selectElement.options[selectElement.selectedIndex ].value)
+            }else{
+              Display.renderProductsPageContainer(productsContainer,
+                selectElement.options[selectElement.selectedIndex ].value, inputTermElement.value)
+            } 
+            });
+        }
+    }
+
 }

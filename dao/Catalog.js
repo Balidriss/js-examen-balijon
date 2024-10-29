@@ -1,14 +1,15 @@
 export default class Catalog {
-  static SEARCH_DEFAULT = '';
-  static SEARCH_DATE_ASC = '_1a_';
-  static SEARCH_DATE_DESC = '_1b_';
-  static SEARCH_ABC_ASC = '_2a_';
-  static SEARCH_ABC_DESC = '_2b_';
-  static SEARCH_PRICE_ASC = '_3a_';
-  static SEARCH_PRICE_DESC = '_3b_';
-  static SEARCH_RESOLUTION_ASC = '_4a_';
-  static SEARCH_RESOLUTION_DESC = '_4b_';
+  static SEARCH_DEFAULT = '---';
+  static SEARCH_DATE_ASC = 'Les moins recents';
+  static SEARCH_DATE_DESC = 'Les plus récents';
+  static SEARCH_ABC_ASC = 'Alphabétique';
+  static SEARCH_ABC_DESC = 'Anti-Alphabétique';
+  static SEARCH_PRICE_ASC = 'Les moins chères';
+  static SEARCH_PRICE_DESC = 'Les plus chères';
+  static SEARCH_RESOLUTION_ASC = 'Résolution croissante';
+  static SEARCH_RESOLUTION_DESC = 'Résolution décroissante';
 
+  static searchs = [Catalog.SEARCH_DEFAULT,Catalog.SEARCH_DATE_ASC,Catalog.SEARCH_DATE_DESC,Catalog.SEARCH_ABC_ASC,Catalog.SEARCH_ABC_DESC,Catalog.SEARCH_PRICE_ASC,Catalog.SEARCH_PRICE_DESC,Catalog.SEARCH_RESOLUTION_ASC,Catalog.SEARCH_RESOLUTION_DESC]
   constructor() {
     this.products = [];
   }
@@ -17,8 +18,12 @@ export default class Catalog {
     this.products = await Catalog.getProducts();
   }
 
-  sort(search) {
-    let sortedProducts = [...this.products];
+  sort(search, term = null) {
+    
+
+    let sortedProducts = term ?  [...this.searchByTerm(term)] :  [...this.products];
+
+
     switch (search) {
       case Catalog.SEARCH_DATE_ASC:
         return sortedProducts;
