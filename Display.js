@@ -1,6 +1,6 @@
 import Cart from './dao/model/Cart.js';
 import Order from './dao/model/Order.js';
-import Catalog from './dao/Catalog.js';
+import Catalog from './Catalog.js';
 
 export default class Display {
   constructor(products, container) {
