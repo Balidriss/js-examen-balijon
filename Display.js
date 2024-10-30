@@ -15,7 +15,9 @@ export default class Display {
       await catalog.initializeCatalog();
       const display = new Display(catalog.getLastNProducts(5), container);
       display.render('minimum');
-      container.querySelectorAll('.product-card').forEach(e => e.classList.add('hot'));
+      container
+        .querySelectorAll('.product-card')
+        .forEach((e) => e.classList.add('hot'));
     }
   }
 
@@ -31,7 +33,6 @@ export default class Display {
       await catalog.initializeCatalog();
       const display = new Display(catalog.sort(search, term), container);
       display.render('preview');
-
     }
   }
   //method to display the detail in product/detail.html
@@ -59,7 +60,7 @@ export default class Display {
         buttonCheckIn.addEventListener('click', () => {
           window.location.href = './order.html';
         });
-        container.parentNode.insertBefore(buttonCheckIn,container.nextSibling);
+        container.parentNode.insertBefore(buttonCheckIn, container.nextSibling);
         document.getElementById('quantity').textContent = cart.getItemCount();
         document.getElementById(
           'total-price'
@@ -78,20 +79,24 @@ export default class Display {
         const form = document.createElement('form');
         const buttonCheckIn = document.createElement('input');
         const labelInput = document.createElement('label');
-        const inputName  = document.createElement('input');
-        inputName.type='text';
-        inputName.name='name';
-        labelInput.for ='name';
-        labelInput.textContent = "Nommer votre commande";
+        const inputName = document.createElement('input');
+        inputName.type = 'text';
+        inputName.name = 'name';
+        labelInput.for = 'name';
+        labelInput.textContent = 'Nommer votre commande';
         form.appendChild(labelInput);
         form.appendChild(inputName);
         buttonCheckIn.type = 'submit';
         buttonCheckIn.value = 'Valider !';
         form.addEventListener('submit', (e) => {
           e.preventDefault();
-          const order = new Order(inputName.value,cart.calculateTotalPrice(), cart.items)
+          const order = new Order(
+            inputName.value,
+            cart.calculateTotalPrice(),
+            cart.items
+          );
           order.addToHistory();
-          alert(`Votre commande : ${order.name} est enregistré ! Merci`)
+          alert(`Votre commande : ${order.name} est enregistré ! Merci`);
           cart.clearCart();
           window.location.href = './orders.html';
         });
@@ -110,7 +115,6 @@ export default class Display {
   //method to display the orders made
   static async renderHistoricPageContainer(container) {
     if (container) {
-      
       const display = new Display(Order.orders, container);
       display.render('historic');
     }
@@ -119,20 +123,20 @@ export default class Display {
   //method to check the order in detail
   static async renderOrderDetailPageContainer(container) {
     if (container) {
-      const order = Order.find(new URLSearchParams(window.location.search).get('id'));
+      const order = Order.find(
+        new URLSearchParams(window.location.search).get('id')
+      );
       const display = new Display(order.items, container);
       display.render('detailorder');
 
-        document.getElementById('quantity').textContent = order.items.length;
-        document.getElementById(
-          'total-price'
-        ).textContent = `${order.totalPrice} €`;
-      }
+      document.getElementById('quantity').textContent = order.items.length;
+      document.getElementById(
+        'total-price'
+      ).textContent = `${order.totalPrice} €`;
     }
+  }
 
-    
-  
- //choose the way each element will be built
+  //choose the way each element will be built
   render(type = 'preview') {
     this.container.innerHTML = '';
     this.products.forEach((item) => {
@@ -150,10 +154,10 @@ export default class Display {
         case 'cart':
           card = this.createCartCard(item);
           break;
-          case 'historic':
+        case 'historic':
           card = this.createOrderCard(item);
           break;
-          case 'detailorder':
+        case 'detailorder':
           card = this.createOrderDetail(item);
           break;
         default:
@@ -176,8 +180,7 @@ export default class Display {
     return card;
   }
 
-  createOrderCardContainer()
-  {
+  createOrderCardContainer() {
     const card = document.createElement('article');
     card.className = 'order-card';
     return card;
@@ -199,12 +202,11 @@ export default class Display {
     this.addLinkToDetail(card, item.id, 'product');
     return card;
   }
-  createOrderDetail(item)
-  {
+  createOrderDetail(item) {
     const card = this.createBaseCard();
     this.addImgFromOrderDetail(card, item);
     this.addTitle(card, item.nom_produit, 'h3');
-    this.addLinkFromOrderDetail(card,item.id);
+    this.addLinkFromOrderDetail(card, item.id);
     return card;
   }
 
@@ -228,50 +230,47 @@ export default class Display {
     return card;
   }
 
-  createOrderCard(item)
-  {
+  createOrderCard(item) {
     const card = this.createOrderCardContainer();
-    this.addTitle(card,item.name,'h2');
-    this.addPrice(card,item.totalPrice);
-    this.addDate(card,item.date);
+    this.addTitle(card, item.name, 'h2');
+    this.addPrice(card, item.totalPrice);
+    this.addDate(card, item.date);
     this.addLinkToDetail(card, item.id, 'order');
     return card;
   }
 
-  addImg(container, item, previewImg = false , hot = false) {
+  addImg(container, item, previewImg = false, hot = false) {
     const img = document.createElement('img');
     img.src = `./assets/${item.image}`;
     img.alt = item.nom_produit;
-    img.classList.add("hot");
-if(previewImg){
-    const aElement = document.createElement('a');
-    aElement.href = `./assets/${item.image}`;
-    aElement.appendChild(img);
-    container.appendChild(aElement);}
-    else{
+    img.classList.add('hot');
+    if (previewImg) {
+      const aElement = document.createElement('a');
+      aElement.href = `./assets/${item.image}`;
+      aElement.appendChild(img);
+      container.appendChild(aElement);
+    } else {
       container.appendChild(img);
     }
   }
-  
+
   addImgFromProductDetail(container, item) {
     const img = document.createElement('img');
     img.src = `../assets/${item.image}`;
     img.alt = item.nom_produit;
-    img.classList.add("hot");
+    img.classList.add('hot');
     const aElement = document.createElement('a');
     aElement.href = `../assets/${item.image}`;
     aElement.appendChild(img);
     container.appendChild(aElement);
-   
   }
 
   addImgFromOrderDetail(container, item) {
     const img = document.createElement('img');
     img.src = `../assets/${item.image}`;
     img.alt = item.nom_produit;
-    img.classList.add("hot");
+    img.classList.add('hot');
     container.appendChild(img);
-
   }
 
   addTitle(container, content, hTitle) {
@@ -293,7 +292,7 @@ if(previewImg){
     container.appendChild(description);
   }
 
-  addLinkToDetail(container, id , model) {
+  addLinkToDetail(container, id, model) {
     container.classList.add('linked');
     container.addEventListener('click', () => {
       window.location.href = `./${model}/detail.html?id=${id}`;
@@ -306,8 +305,7 @@ if(previewImg){
     });
   }
 
-  addDate(container , date)
-  {
+  addDate(container, date) {
     const dateElement = document.createElement('p');
     dateElement.textContent = date;
     container.appendChild(dateElement);
@@ -328,7 +326,7 @@ if(previewImg){
   addButtonRemoveFromCart(container, id, name) {
     const button = document.createElement('button');
     button.textContent = 'Enlever du panier';
-    console.log("test");
+    console.log('test');
     button.addEventListener('click', () => {
       const cart = new Cart();
       cart.removeFromCart(id);
@@ -351,33 +349,33 @@ if(previewImg){
   }
 
   //method that dynamicaly change the result of the search.
-  static renderSearch(form,productsContainer)
-  {
-    if(form && productsContainer)
-    {
+  static renderSearch(form, productsContainer) {
+    if (form && productsContainer) {
       const selectElement = document.querySelector('select');
       const inputTermElement = document.getElementById('term-input');
       console.log(Catalog.searchs);
-          Catalog.searchs.forEach(criteria => {
-            
-            const optionElement = document.createElement('option');
-            
-            optionElement.textContent = criteria;
-            selectElement.appendChild(optionElement); 
-            });
-            form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            console.log(selectElement.options[selectElement.selectedIndex ].value);
-            if(!inputTermElement.value)
-            {
-              Display.renderProductsPageContainer(productsContainer,
-                selectElement.options[selectElement.selectedIndex ].value)
-            }else{
-              Display.renderProductsPageContainer(productsContainer,
-                selectElement.options[selectElement.selectedIndex ].value, inputTermElement.value)
-            } 
-            });
-        }
-    }
+      Catalog.searchs.forEach((criteria) => {
+        const optionElement = document.createElement('option');
 
+        optionElement.textContent = criteria;
+        selectElement.appendChild(optionElement);
+      });
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        console.log(selectElement.options[selectElement.selectedIndex].value);
+        if (!inputTermElement.value) {
+          Display.renderProductsPageContainer(
+            productsContainer,
+            selectElement.options[selectElement.selectedIndex].value
+          );
+        } else {
+          Display.renderProductsPageContainer(
+            productsContainer,
+            selectElement.options[selectElement.selectedIndex].value,
+            inputTermElement.value
+          );
+        }
+      });
+    }
+  }
 }

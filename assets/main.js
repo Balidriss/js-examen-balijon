@@ -25,9 +25,5 @@ async function init() {
   Display.renderOrderValidationPageContainer(orderContainer);
   Display.renderHistoricPageContainer(historicContainer);
   Display.renderOrderDetailPageContainer(pastOrderContainer);
-  Display.renderSearch(searchForm,productsContainer);
-
-
-  
-
+  Display.renderSearch(searchForm, productsContainer);
 }

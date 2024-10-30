@@ -9,7 +9,17 @@ export default class Catalog {
   static SEARCH_RESOLUTION_ASC = 'Résolution croissante';
   static SEARCH_RESOLUTION_DESC = 'Résolution décroissante';
 
-  static searchs = [Catalog.SEARCH_DEFAULT,Catalog.SEARCH_DATE_ASC,Catalog.SEARCH_DATE_DESC,Catalog.SEARCH_ABC_ASC,Catalog.SEARCH_ABC_DESC,Catalog.SEARCH_PRICE_ASC,Catalog.SEARCH_PRICE_DESC,Catalog.SEARCH_RESOLUTION_ASC,Catalog.SEARCH_RESOLUTION_DESC]
+  static searchs = [
+    Catalog.SEARCH_DEFAULT,
+    Catalog.SEARCH_DATE_ASC,
+    Catalog.SEARCH_DATE_DESC,
+    Catalog.SEARCH_ABC_ASC,
+    Catalog.SEARCH_ABC_DESC,
+    Catalog.SEARCH_PRICE_ASC,
+    Catalog.SEARCH_PRICE_DESC,
+    Catalog.SEARCH_RESOLUTION_ASC,
+    Catalog.SEARCH_RESOLUTION_DESC,
+  ];
   constructor() {
     this.products = [];
   }
@@ -19,10 +29,9 @@ export default class Catalog {
   }
 
   sort(search, term = null) {
-    
-
-    let sortedProducts = term ?  [...this.searchByTerm(term)] :  [...this.products];
-
+    let sortedProducts = term
+      ? [...this.searchByTerm(term)]
+      : [...this.products];
 
     switch (search) {
       case Catalog.SEARCH_DATE_ASC:
@@ -79,12 +88,18 @@ export default class Catalog {
   // Fetch products from the JSON file
   static async getProducts() {
     try {
-      const response = await fetch('./produits.json');
+      // Determine the fetch path based on the current directory (I HATE THIS)
+      const path =
+        window.location.pathname.includes('/product/') ||
+        window.location.pathname.includes('/order/')
+          ? '../produits.json'
+          : './produits.json';
+
+      const response = await fetch(path);
       if (!response.ok) {
-        throw new Error(
-          'Erreur lors du chargement des données'
-        );
+        throw new Error('Erreur lors du chargement des données');
       }
+
       const products = await response.json();
       return Catalog.setIndex(products);
     } catch (error) {
