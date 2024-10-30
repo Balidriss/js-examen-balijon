@@ -14,6 +14,7 @@ export default class Display {
       await catalog.initializeCatalog();
       const display = new Display(catalog.getLastNProducts(5), container);
       display.render('minimum');
+      container.querySelectorAll('.product-card').forEach(e => e.classList.add('hot'));
     }
   }
 
@@ -28,6 +29,7 @@ export default class Display {
       await catalog.initializeCatalog();
       const display = new Display(catalog.sort(search, term), container);
       display.render('preview');
+
     }
   }
   static async renderProductDetailPageContainer(container) {
@@ -53,7 +55,7 @@ export default class Display {
         buttonCheckIn.addEventListener('click', () => {
           window.location.href = 'order.html';
         });
-        container.appendChild(buttonCheckIn);
+        container.parentNode.insertBefore(buttonCheckIn,container.nextSibling);
         document.getElementById('quantity').textContent = cart.getItemCount();
         document.getElementById(
           'total-price'
@@ -162,7 +164,7 @@ export default class Display {
 
   createBaseCard() {
     const card = document.createElement('article');
-    card.className = 'product-card';
+    card.className = 'product-card container';
     return card;
   }
 
@@ -221,17 +223,18 @@ export default class Display {
   createOrderCard(item)
   {
     const card = this.createOrderCardContainer();
-    this.addTitle(card,item.name);
+    this.addTitle(card,item.name,'h2');
     this.addPrice(card,item.totalPrice);
     this.addDate(card,item.date);
     this.addLinkToDetail(card, item.id, 'order');
     return card;
   }
 
-  addImg(container, item, previewImg = false) {
+  addImg(container, item, previewImg = false , hot = false) {
     const img = document.createElement('img');
     img.src = `/assets/${item.image}`;
     img.alt = item.nom_produit;
+    img.classList.add("hot");
 if(previewImg){
     const aElement = document.createElement('a');
     aElement.href = `/assets/${item.image}`;
