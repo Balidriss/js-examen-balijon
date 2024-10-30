@@ -8,6 +8,7 @@ export default class Display {
     this.container = container;
   }
 
+  //method to display the new products on the frontpage
   static async renderFrontPageContainer(container) {
     if (container) {
       const catalog = new Catalog();
@@ -18,6 +19,7 @@ export default class Display {
     }
   }
 
+  //method to display the products on "catalogue"
   static async renderProductsPageContainer(
     container,
     search = Catalog.SEARCH_DEFAULT,
@@ -32,6 +34,7 @@ export default class Display {
 
     }
   }
+  //method to display the detail in product/detail.html
   static async renderProductDetailPageContainer(container) {
     if (container) {
       const catalog = new Catalog();
@@ -43,6 +46,7 @@ export default class Display {
       display.render('detailed');
     }
   }
+  //method to display the cart
   static async renderCartPageContainer(container) {
     if (container) {
       const cart = new Cart();
@@ -63,6 +67,7 @@ export default class Display {
       }
     }
   }
+  //method to display the page to confirm the order
   static async renderOrderValidationPageContainer(container) {
     if (container) {
       const cart = new Cart();
@@ -101,6 +106,8 @@ export default class Display {
       }
     }
   }
+
+  //method to display the orders made
   static async renderHistoricPageContainer(container) {
     if (container) {
       
@@ -109,6 +116,7 @@ export default class Display {
     }
   }
 
+  //method to check the order in detail
   static async renderOrderDetailPageContainer(container) {
     if (container) {
       const order = Order.find(new URLSearchParams(window.location.search).get('id'));
@@ -124,7 +132,7 @@ export default class Display {
 
     
   
-
+ //choose the way each element will be built
   render(type = 'preview') {
     this.container.innerHTML = '';
     this.products.forEach((item) => {
@@ -321,6 +329,7 @@ if(previewImg){
     container.appendChild(characteristicsList);
   }
 
+  //method that dynamicaly change the result of the search.
   static renderSearch(form,productsContainer)
   {
     if(form && productsContainer)

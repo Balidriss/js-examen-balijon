@@ -1,6 +1,8 @@
 export default class Order {
   static currentOrder = Order.loadCurrentOrderLocalStorage();
   static orders = Order.loadOrdersLocalStorage();
+
+  //simulate increment
   static counter = Order.loadCounterLocalStorage();
 
   constructor(name,totalPrice, items) {
@@ -8,6 +10,7 @@ export default class Order {
     this.date = new Date().toLocaleString();
     this.items = items;
     this.totalPrice = totalPrice;
+    //simulate increment
     this.id = Order.counter++;
     localStorage.setItem('counter', JSON.stringify(Order.counter));
   }

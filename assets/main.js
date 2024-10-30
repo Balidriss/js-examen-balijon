@@ -17,6 +17,7 @@ async function init() {
 
   //// index
 
+  //Look for the container, if it exist display corresponding vue.
   Display.renderFrontPageContainer(hotProductContainer);
   Display.renderProductsPageContainer(productsContainer);
   Display.renderCartPageContainer(cartContainer);
@@ -25,4 +26,8 @@ async function init() {
   Display.renderHistoricPageContainer(historicContainer);
   Display.renderOrderDetailPageContainer(pastOrderContainer);
   Display.renderSearch(searchForm,productsContainer);
+
+
+  
+
 }
