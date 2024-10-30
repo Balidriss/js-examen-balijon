@@ -57,7 +57,7 @@ export default class Display {
         const buttonCheckIn = document.createElement('button');
         buttonCheckIn.textContent = 'Commander !';
         buttonCheckIn.addEventListener('click', () => {
-          window.location.href = 'order.html';
+          window.location.href = './order.html';
         });
         container.parentNode.insertBefore(buttonCheckIn,container.nextSibling);
         document.getElementById('quantity').textContent = cart.getItemCount();
@@ -93,7 +93,7 @@ export default class Display {
           order.addToHistory();
           alert(`Votre commande : ${order.name} est enregistré ! Merci`)
           cart.clearCart();
-          window.location.href = 'orders.html';
+          window.location.href = './orders.html';
         });
 
         form.appendChild(buttonCheckIn);
@@ -202,7 +202,7 @@ export default class Display {
   createOrderDetail(item)
   {
     const card = this.createBaseCard();
-    this.addImg(card, item);
+    this.addImgFromOrderDetail(card, item);
     this.addTitle(card, item.nom_produit, 'h3');
     this.addLinkFromOrderDetail(card,item.id);
     return card;
@@ -210,7 +210,7 @@ export default class Display {
 
   createDetailedCard(item) {
     const card = this.createBaseCard();
-    this.addImg(card, item, true);
+    this.addImgFromProductDetail(card, item);
     this.addTitle(card, item.nom_produit, 'h2');
     this.addPrice(card, item.prix);
     this.addDecription(card, item.descriptif);
@@ -240,17 +240,38 @@ export default class Display {
 
   addImg(container, item, previewImg = false , hot = false) {
     const img = document.createElement('img');
-    img.src = `/assets/${item.image}`;
+    img.src = `./assets/${item.image}`;
     img.alt = item.nom_produit;
     img.classList.add("hot");
 if(previewImg){
     const aElement = document.createElement('a');
-    aElement.href = `/assets/${item.image}`;
+    aElement.href = `./assets/${item.image}`;
     aElement.appendChild(img);
     container.appendChild(aElement);}
     else{
       container.appendChild(img);
     }
+  }
+  
+  addImgFromProductDetail(container, item) {
+    const img = document.createElement('img');
+    img.src = `../assets/${item.image}`;
+    img.alt = item.nom_produit;
+    img.classList.add("hot");
+    const aElement = document.createElement('a');
+    aElement.href = `../assets/${item.image}`;
+    aElement.appendChild(img);
+    container.appendChild(aElement);
+   
+  }
+
+  addImgFromOrderDetail(container, item) {
+    const img = document.createElement('img');
+    img.src = `../assets/${item.image}`;
+    img.alt = item.nom_produit;
+    img.classList.add("hot");
+    container.appendChild(img);
+
   }
 
   addTitle(container, content, hTitle) {
@@ -275,7 +296,7 @@ if(previewImg){
   addLinkToDetail(container, id , model) {
     container.classList.add('linked');
     container.addEventListener('click', () => {
-      window.location.href = `${model}/detail.html?id=${id}`;
+      window.location.href = `./${model}/detail.html?id=${id}`;
     });
   }
   addLinkFromOrderDetail(container, id) {
@@ -312,7 +333,7 @@ if(previewImg){
       const cart = new Cart();
       cart.removeFromCart(id);
       alert(`${name} a été retiré du panier!`);
-      window.location.href = 'cart.html';
+      window.location.href = './cart.html';
     });
     container.appendChild(button);
   }

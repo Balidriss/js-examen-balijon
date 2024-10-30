@@ -79,7 +79,7 @@ export default class Catalog {
   // Fetch products from the JSON file
   static async getProducts() {
     try {
-      const response = await fetch('/assets/produits.json');
+      const response = await fetch('../assets/produits.json');
       if (!response.ok) {
         throw new Error(
           'Erreur lors du chargement des données, vérifier si produits.json est bien dans le dossier /assets'
